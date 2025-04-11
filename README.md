@@ -132,9 +132,13 @@ El sistema está compuesto por múltiples servicios distribuidos que se comunica
 
 - **Traefik**:
   - Proxy inverso que expone y enruta los servicios.
-  - Implementa middlewares como autenticación, HTTPS, y rate limiting.
+
 
 ---
+## Diagrama de arquitectura 
+
+![image](https://github.com/user-attachments/assets/60bb3f59-a3d1-4229-a98e-6973c2bf6507)
+
 
 ## 🔧 Cambios realizados respecto a la versión original
 
