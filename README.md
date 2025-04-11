@@ -41,9 +41,9 @@ git clone https://github.com/Mei-2513/Taller-RabbitMQ.git
 ## 2.Verificar requisitos
 Asegúrate de tener instalados:
 
-    -Docker 
+ -Docker 
 
-    -Docker Compose → integrado en Docker moderno
+ -Docker Compose → integrado en Docker moderno
 
 ## 3. Levantar los servicios 
 Desde la raíz del proyecto:
@@ -124,18 +124,23 @@ Identificar en la arquitectura del parcial actual:
 ## Preguntas del Taller
 
 1.¿Qué beneficio aporta RabbitMQ en comparación con el modelo de solicitud  directa HTTP?
+
 Permite comunicación asincrónica, desacopla servicios y mejora la resiliencia.
 
 2.¿Qué problemas podrían surgir si se caen algunos servicios?
+
 Los mensajes siguen encolados y serán procesados cuando el consumidor vuelva.
 
 3.¿Cómo ayuda RabbitMQ a mejorar la resiliencia del sistema?
+
 Evita pérdida de mensajes y desacopla el tiempo entre productor y consumidor.
 
 4.¿Cómo cambiaría la lógica de escalabilidad con esta nueva arquitectura?
+
 Se pueden agregar múltiples productores o consumidores sin afectar el diseño.
 
 5.¿Qué formato de mensaje es más conveniente y por qué (JSON, texto plano,etc.)?
+
 JSON: porque es fácil de leer, estructurado, ampliamente soportado en sistemas distribuidos.
 
 ## Arquitectura
