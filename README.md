@@ -73,20 +73,20 @@ Es un sistema de mensajería basado en colas que permite comunicación asincrón
 
 ¿Qué ventajas ofrece frente a llamadas HTTP directas entre servicios??
 
--Comunicación asincrónica
+    -Comunicación asincrónica
 
--Mayor tolerancia a fallos
+    -Mayor tolerancia a fallos
 
--Desacoplamiento entre productor y consumidor
+    -Desacoplamiento entre productor y consumidor
 
--Mejora la escalabilidad
+    -Mejora la escalabilidad
 
 ¿Qué son colas, exchanges, publishers y consumers?
 
--Publisher: Servicio que envía mensajes.
+    -Publisher: Servicio que envía mensajes.
 
--Exchange: Recibe mensajes y los redirige según reglas.
+    -Exchange: Recibe mensajes y los redirige según reglas.
 
--Cola (Queue): Almacena mensajes en espera de ser consumidos.
+    -Cola (Queue): Almacena mensajes en espera de ser consumidos.
 
--Consumer: Servicio que procesa los mensajes.
+    -Consumer: Servicio que procesa los mensajes.
