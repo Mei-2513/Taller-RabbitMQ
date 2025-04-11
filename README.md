@@ -67,12 +67,12 @@ Contraseña: guest
 
 ## para enviar manualmente una solicitud al servicio-cliente-x, simulando el comportamiento de un cliente real:
         curl -X POST http://localhost/servicio/cliente/x1/solicitud \
-  -H "Content-Type: application/json" \
-  -d '{"cliente": "cliente-x1", "accion": "ver_producto"}'
+        -H "Content-Type: application/json" \
+        -d '{"cliente": "cliente-x1", "accion": "ver_producto"}'
 
         curl -X POST http://localhost/servicio/cliente/x2/solicitud \
-  -H "Content-Type: application/json" \
-  -d '{"cliente": "cliente-x1", "accion": "ver_producto"}'
+        -H "Content-Type: application/json" \
+        -d '{"cliente": "cliente-x1", "accion": "ver_producto"}'
 
 
 ## ✅ Actividades del Taller
