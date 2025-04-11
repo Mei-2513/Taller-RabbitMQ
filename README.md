@@ -38,7 +38,8 @@ docker compose up --build
 
 ## Esto iniciará:
 
-🧩 servicio-cliente-x
+🧩 servicio-cliente-x1
+🧩 servicio-cliente-x2
 
 📊 servicio-analiticas
 
@@ -65,3 +66,27 @@ Contraseña: guest
 docker compose logs -f
 
 ## ✅ Actividades del Taller
+
+## 1. Revisión conceptual
+¿Qué es RabbitMQ y cuál es su función en una arquitectura distribuida??
+Es un sistema de mensajería basado en colas que permite comunicación asincrónica entre servicios. Facilita el desacoplamiento y la escalabilidad.
+
+¿Qué ventajas ofrece frente a llamadas HTTP directas entre servicios??
+
+-Comunicación asincrónica
+
+-Mayor tolerancia a fallos
+
+-Desacoplamiento entre productor y consumidor
+
+-Mejora la escalabilidad
+
+¿Qué son colas, exchanges, publishers y consumers?
+
+-Publisher: Servicio que envía mensajes.
+
+-Exchange: Recibe mensajes y los redirige según reglas.
+
+-Cola (Queue): Almacena mensajes en espera de ser consumidos.
+
+-Consumer: Servicio que procesa los mensajes.
