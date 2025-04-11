@@ -4,45 +4,61 @@ services:
   traefik:
     image: traefik:v2.9
     container_name: traefik
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker"
-      - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
-      - "8080:8080" 
+      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./traefik.yml:/traefik.yml:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
     networks:
-      - web     
-      
+      - web
+
   servicio-analiticas:
-    build: ./servicio-analiticas 
+    build: ./servicio-analiticas
     container_name: servicio-analiticas
+    depends_on:
+      - rabbitmq
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.servicio-analiticas.rule=Host(`localhost`) && PathPrefix(`/analiticas`)"
-      - "traefik.http.routers.servicio-analiticas.entrypoints=web"
-   
-      - "traefik.http.middlewares.servicio-analiticas-basicauth.basicauth.users=admin:$$2y$$05$$BudbvtdBvEieYeW8PKHoeuRmtFqhsdLEGFGLXaf2zNrDD.v/SuFhK
-"
-      - "traefik.http.routers.servicio-analiticas.middlewares=servicio-analiticas-basicauth"
-      - "traefik.http.services.servicio-analiticas.loadbalancer.server.port=3000"
+
+      # Ruta pública: POST /analiticas
+      - "traefik.http.routers.analiticas.rule=Path(`/analiticas`)"
+      - "traefik.http.routers.analiticas.entrypoints=web"
+      - "traefik.http.routers.analiticas.service=analiticas-srv"
+
+      # Ruta protegida: GET /analiticas/reporte
+      - "traefik.http.routers.reporte.rule=Path(`/analiticas/reporte`)"
+      - "traefik.http.routers.reporte.entrypoints=web"
+      - "traefik.http.routers.reporte.service=analiticas-srv"
+      - "traefik.http.routers.reporte.middlewares=auth"
+
+      # Servicio compartido
+      - "traefik.http.services.analiticas-srv.loadbalancer.server.port=3000"
+      
+            # Ruta para estadísticas (GET /analiticas/stats)
+      - "traefik.http.routers.stats.rule=Path(`/analiticas/stats`)"
+      - "traefik.http.routers.stats.entrypoints=web"
+      - "traefik.http.routers.stats.service=analiticas-srv"
+
+
+      # Middleware de autenticación básica 
+      - "traefik.http.middlewares.auth.basicauth.users=admin:$$2y$$10$$WPG1MFppnjxnwhUbmumPcuAUVPCSd8eqfobJTPZbx.VZj9Z3.xvtS"
     networks:
-      - web      
-  
+      - web
+
   servicio-cliente-x1:
     build: ./servicio-cliente-x
     container_name: servicio-cliente-x1
     environment:
       - CLIENT_ID=x1
+    depends_on:
+      - rabbitmq
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.servicio-cliente-x1.rule=Host(`localhost`) && PathPrefix(`/servicio/cliente/x1`)"
+      - "traefik.http.routers.servicio-cliente-x1.rule=PathPrefix(`/servicio/cliente/x1`)"
       - "traefik.http.routers.servicio-cliente-x1.entrypoints=web"
-      - "traefik.http.middlewares.servicio-cliente-x1-strip.stripprefix.prefixes=/servicio/cliente/x"
-      - "traefik.http.routers.servicio-cliente-x1.middlewares=servicio-cliente-x1-strip"
+      - "traefik.http.middlewares.cliente-x1-strip.stripprefix.prefixes=/servicio/cliente/x1"
+      - "traefik.http.routers.servicio-cliente-x1.middlewares=cliente-x1-strip"
       - "traefik.http.services.servicio-cliente-x1.loadbalancer.server.port=3000"
     networks:
       - web
@@ -52,15 +68,45 @@ services:
     container_name: servicio-cliente-x2
     environment:
       - CLIENT_ID=x2
+    depends_on:
+      - rabbitmq
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.servicio-cliente-x2.rule=Host(`localhost`) && PathPrefix(`/servicio/cliente/x2`)"
+      - "traefik.http.routers.servicio-cliente-x2.rule=PathPrefix(`/servicio/cliente/x2`)"
       - "traefik.http.routers.servicio-cliente-x2.entrypoints=web"
-      - "traefik.http.middlewares.servicio-cliente-x2-strip.stripprefix.prefixes=/servicio/cliente/x2"
-      - "traefik.http.routers.servicio-cliente-x2.middlewares=servicio-cliente-x2-strip"
+      - "traefik.http.middlewares.cliente-x2-strip.stripprefix.prefixes=/servicio/cliente/x2"
+      - "traefik.http.routers.servicio-cliente-x2.middlewares=cliente-x2-strip"
       - "traefik.http.services.servicio-cliente-x2.loadbalancer.server.port=3000"
     networks:
       - web
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"       
+      - "15672:15672"     
+    networks:
+      - web
+
+  panel-visual:
+    build: ./panel-visual
+    container_name: panel-visual
+    depends_on:
+      - servicio-analiticas
+    labels:
+       - "traefik.enable=true"
+       - "traefik.http.routers.panel-visual.rule=PathPrefix(`/panel`)"
+       - "traefik.http.routers.panel-visual.entrypoints=web"
+       - "traefik.http.routers.panel-visual.middlewares=panel-strip"
+       - "traefik.http.services.panel-visual.loadbalancer.server.port=3003"
+       - "traefik.http.middlewares.panel-strip.stripprefix.prefixes=/panel"
+    networks:
+      - web
+
+
+
 networks:
   web:
     driver: bridge
+
