@@ -90,3 +90,33 @@ Es un sistema de mensajería basado en colas que permite comunicación asincrón
     -Cola (Queue): Almacena mensajes en espera de ser consumidos.
 
     -Consumer: Servicio que procesa los mensajes.
+    
+## 2. Análisis del sistema actual
+Identificar en la arquitectura del parcial actual:
+
+¿Quién produce eventos?
+    servicio-cliente-x
+
+¿Quién consume eventos?
+    servicio-analiticas
+
+¿Dónde existen acoplamientos directos que podrían desacoplarse?
+    servicio-cliente-x hacía una llamada directa HTTP a servicio-analiticas
+
+## Preguntas del Taller
+
+1.¿Qué beneficio aporta RabbitMQ en comparación con el modelo de solicitud  directa HTTP?
+Permite comunicación asincrónica, desacopla servicios y mejora la resiliencia.
+
+2.¿Qué problemas podrían surgir si se caen algunos servicios?
+Los mensajes siguen encolados y serán procesados cuando el consumidor vuelva.
+
+3.¿Cómo ayuda RabbitMQ a mejorar la resiliencia del sistema?
+Evita pérdida de mensajes y desacopla el tiempo entre productor y consumidor.
+
+4.¿Cómo cambiaría la lógica de escalabilidad con esta nueva arquitectura?
+Se pueden agregar múltiples productores o consumidores sin afectar el diseño.
+
+5.¿Qué formato de mensaje es más conveniente y por qué (JSON, texto plano,etc.)?
+JSON: porque es fácil de leer, estructurado, ampliamente soportado en sistemas distribuidos.
+
