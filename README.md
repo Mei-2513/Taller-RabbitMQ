@@ -34,7 +34,7 @@ Asegúrate de tener instalados:
 ## 3. Levantar los servicios 
 Desde la raíz del proyecto:
 
-docker compose up --build
+        docker compose up --build
 
 ## Esto iniciará:
 
@@ -63,7 +63,17 @@ Contraseña: guest
 
 ## 5. Ver logs
 
-docker compose logs -f
+        docker compose logs -f
+
+## para enviar manualmente una solicitud al servicio-cliente-x, simulando el comportamiento de un cliente real:
+        curl -X POST http://localhost/servicio/cliente/x1/solicitud \
+  -H "Content-Type: application/json" \
+  -d '{"cliente": "cliente-x1", "accion": "ver_producto"}'
+
+        curl -X POST http://localhost/servicio/cliente/x2/solicitud \
+  -H "Content-Type: application/json" \
+  -d '{"cliente": "cliente-x1", "accion": "ver_producto"}'
+
 
 ## ✅ Actividades del Taller
 
